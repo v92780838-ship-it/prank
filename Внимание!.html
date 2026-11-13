@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Внимание!</title>
+<style>
+:root {
+  --bg: #0a0000; --red: #ff2a2a; --dark: #2a0000; --text: #ffffff;
+  box-sizing: border-box; color-scheme: dark;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+html, body { height: 100%; margin: 0; }
+body { background: radial-gradient(circle at 30% 40%, #3a0000, var(--bg) 70%); color: var(--text); overflow: hidden;
+  font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+.row { height: 100%; display: flex; align-items: center; gap: 12px; padding: 0 14px; box-sizing: border-box; animation: fade .4s ease both; }
+.msg { flex: 1; min-width: 0; }
+.warn { font-size: 44px; animation: blink 1s steps(2) infinite; }
+h1 { margin: 6px 0 0; font-size: 26px; line-height: 1.15; text-transform: uppercase; text-shadow: 0 0 14px rgba(255,42,42,.7); animation: shake 3s infinite; }
+h1 b { color: var(--red); }
+.btn { display: inline-block; padding: 12px 14px; font-size: 14px; font-weight: 700; line-height: 1.2; text-align: center; color: #fff; text-decoration: none; cursor: pointer; font-family: inherit;
+  background: linear-gradient(135deg, #e50000, #1a0000); border: 1px solid rgba(255,80,80,.6); border-radius: 8px;
+  box-shadow: 0 0 18px rgba(255,0,0,.55), inset 0 1px 0 rgba(255,255,255,.2); transition: transform .2s ease, filter .2s ease; animation: pulse 1.6s ease-in-out infinite; }
+.btn:active { transform: scale(.95); }
+@media (hover: hover) { .btn:hover { filter: brightness(1.2); } }
+.side { flex: 0 0 auto; max-width: 110px; display: flex; flex-direction: column; gap: 12px; }
+#next, #who { display: none; position: fixed; inset: 0; box-sizing: border-box; background: radial-gradient(circle at 50% 40%, #3a0000, var(--bg) 70%);
+  padding: calc(16px + env(safe-area-inset-top, 0px)) 20px calc(16px + env(safe-area-inset-bottom, 0px));
+  flex-direction: column; align-items: center; justify-content: center; gap: 14px; text-align: center; }
+body.go #next, body.nm #who { display: flex; animation: fade .4s ease both; }
+body.go .row, body.nm .row { display: none; }
+#next h2, #who h2 { margin: 0; font-size: 22px; line-height: 1.25; text-shadow: 0 0 14px rgba(255,42,42,.6); animation: rise .5s ease both; }
+#next .num { font-size: 30px; font-weight: 800; color: var(--red); letter-spacing: 1px; animation: rise .5s .15s ease both; }
+#next .joke { display: none; font-size: 24px; font-weight: 700; color: #ffd0d0; }
+#next .joke.show { display: block; animation: rise .5s ease both; }
+#next .ask { font-size: 16px; color: #ffd0d0; animation: rise .5s .1s ease both; }
+#who .num { font-size: 26px; font-weight: 800; line-height: 1.3; color: var(--red); animation: rise .5s .15s ease both; }
+.pop { display: none; margin-top: 10px; font-size: 14px; line-height: 1.3; color: #ffd0d0; }
+.pop.show { display: block; animation: rise .4s ease both; }
+.back { position: absolute; top: calc(12px + env(safe-area-inset-top, 0px)); left: 12px; font-size: 13px; padding: 8px 12px; animation: none; }
+.back.locked { opacity: .45; pointer-events: none; }
+#laugh { display: none; position: fixed; inset: 0; z-index: 10; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; background: rgba(0,0,0,.85); }
+#laugh.show { display: flex; animation: fade .2s ease both; }
+#laugh .box { max-width: 320px; padding: 22px 20px; text-align: center; font-size: 22px; font-weight: 700; line-height: 1.3; background: #1a0000; border: 2px solid var(--red); border-radius: 14px; box-shadow: 0 0 30px rgba(255,0,0,.6); animation: pop .3s ease both; }
+@keyframes pop { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: none; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes blink { 50% { opacity: .35; } }
+@keyframes pulse { 50% { box-shadow: 0 0 28px rgba(255,0,0,.9), inset 0 1px 0 rgba(255,255,255,.2); transform: scale(1.04); } }
+@keyframes shake { 0%, 92%, 100% { transform: none; } 94% { transform: translateX(-3px); } 96% { transform: translateX(3px); } 98% { transform: translateX(-2px); } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="row">
+  <div class="side">
+    <a class="btn" href="#who" id="names">Я знаю<br>ваши имена</a>
+    <a class="btn" href="#next" id="open">Выплата<br>за аккаунт</a>
+    <a class="btn" href="#" id="exit">Выход<br>из сайта</a>
+  </div>
+  <div class="msg">
+    <div class="warn">⚠️</div>
+    <h1>Ваш аккаунт в ТГ был <b>взломан</b></h1>
+  </div>
+</div>
+<section id="next">
+  <a class="btn back" href="#" id="back">Назад</a>
+  <h2>Через <span id="sec">40</span> <span id="sw">секунд</span> ваш аккаунт в ТГ будет взломан неизвестным пользователем</h2>
+  <div class="ask">Если не хотите, чтобы ваш аккаунт был взломан, отправьте биткоин на этот номер:</div>
+  <div class="num">+373 69933008</div>
+  <div class="joke" id="joke">😄 Шутка, это пранк</div>
+</section>
+<section id="who">
+  <a class="btn back" href="#" id="back2">Назад</a>
+  <h2>Я знаю ваши имена</h2>
+  <div class="num">Илья, Ваня, Тимофей, Давид или Влад 😏</div>
+</section>
+<div id="laugh"><div class="box">Ты правда думал, что это против меня сработает? 😈<br>Пхахахаха</div></div>
+<script>
+var tm, left = 40;
+function paint() {
+  var n = Math.max(left, 0), m = n % 10, t = n % 100;
+  document.getElementById('sec').textContent = n;
+  document.getElementById('sw').textContent = (t > 10 && t < 15) ? 'секунд' : m === 1 ? 'секунду' : (m > 1 && m < 5) ? 'секунды' : 'секунд';
+  var b = document.getElementById('back');
+  b.textContent = n > 0 ? 'Назад (' + n + ')' : 'Назад';
+  b.classList.toggle('locked', n > 0);
+}
+function stopT() { clearInterval(tm); window.onbeforeunload = null; }
+function startT() {
+  stopT();
+  paint();
+  if (left <= 0) { document.getElementById('joke').classList.add('show'); return; }
+  window.onbeforeunload = function (e) { e.preventDefault(); e.returnValue = ''; return ''; };
+  tm = setInterval(function () {
+    left--;
+    paint();
+    if (left <= 0) { clearInterval(tm); window.onbeforeunload = null; document.getElementById('joke').classList.add('show'); }
+  }, 1000);
+}
+function sync() {
+  var h = location.hash, on = h === '#next';
+  if (left > 0 && document.body.classList.contains('go') && !on) { try { location.hash = 'next'; } catch (x) {} return; }
+  document.body.classList.toggle('go', on);
+  document.body.classList.toggle('nm', h === '#who');
+  if (on) { startT(); } else { stopT(); }
+}
+document.getElementById('names').addEventListener('click', function (e) { e.preventDefault(); stopT(); try { location.hash = 'who'; } catch (x) {} document.body.classList.remove('go'); document.body.classList.add('nm'); });
+document.getElementById('back2').addEventListener('click', function (e) { e.preventDefault(); try { location.hash = ''; } catch (x) {} document.body.classList.remove('nm'); });
+document.getElementById('open').addEventListener('click', function (e) { e.preventDefault(); try { location.hash = 'next'; } catch (x) {} document.body.classList.add('go'); startT(); });
+document.getElementById('back').addEventListener('click', function (e) { e.preventDefault(); if (left > 0) return; try { location.hash = ''; } catch (x) {} document.body.classList.remove('go'); stopT(); });
+document.getElementById('exit').addEventListener('click', function (e) {
+  e.preventDefault();
+  var l = document.getElementById('laugh'); l.classList.add('show');
+  setTimeout(function () {
+    l.classList.remove('show');
+    try { location.hash = 'next'; } catch (x) {}
+    document.body.classList.add('go'); startT();
+  }, 3000);
+});
+window.addEventListener('hashchange', sync); sync();
+</script>
+</body>
+</html>
